@@ -1,0 +1,94 @@
+{
+  "kind": "Dashboard",
+  "apiVersion": "dashboard.grafana.app/v1beta1",
+  "metadata": {
+    "name": "sample-dashboard-issue-107",
+    "creationTimestamp": null
+  },
+  "spec": {
+    "uid": "sample-dashboard-issue-107",
+    "title": "Sample dashboard Issue 107",
+    "tags": [
+      "generated",
+      "from",
+      "go"
+    ],
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 0,
+    "time": {
+      "from": "now-30m",
+      "to": "now"
+    },
+    "fiscalYearStartMonth": 0,
+    "refresh": "1m",
+    "schemaVersion": 41,
+    "panels": [
+      {
+        "type": "row",
+        "collapsed": false,
+        "title": "Overview",
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 0,
+        "panels": []
+      },
+      {
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "\nhistogram_quantile(0.99, sum by (verb,scope,le) (\n  rate (\n    apiserver_response_sizes_bucket{scope!=\"\"}[$__rate_interval]\n  )\n))\n",
+            "legendFormat": "{{ device }}",
+            "refId": ""
+          }
+        ],
+        "title": "API Server Response Size",
+        "transparent": false,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 1
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "min": 0
+          },
+          "overrides": []
+        }
+      },
+      {
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "\nhistogram_quantile(0.99, sum by (group,le) (\n  rate (\n    apiserver_request_duration_seconds_bucket{verb!~\"(WATCH)\"}[$__rate_interval]\n  )\n))\n\t\t",
+            "legendFormat": "{{ device }}",
+            "refId": ""
+          }
+        ],
+        "title": "API Server Request Duration",
+        "transparent": false,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 1
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "seconds",
+            "min": 0
+          },
+          "overrides": []
+        }
+      }
+    ],
+    "templating": {},
+    "annotations": {}
+  }
+}
